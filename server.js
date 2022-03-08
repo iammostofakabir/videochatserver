@@ -1,16 +1,18 @@
 const express = require("express")
 const http = require("http")
 const app = express()
-const cors = require('cors');
 const server = http.createServer(app)
 const io = require("socket.io")(server, {
 	cors: {
-		origin: "https://mysterious-citadel-77081.herokuapp.com/",
+		origin: "*",
 		methods: [ "GET", "POST" ]
 	}
 })
 
-app.use(cors());
+app.use((req, res, next) => {
+	res.header('Access-Control-Allow-Origin', '*');
+	next();
+  });
 
 io.on("connection", (socket) => {
 	socket.emit("me", socket.id)
